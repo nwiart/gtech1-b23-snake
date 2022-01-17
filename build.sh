@@ -1,1 +1,1 @@
-g++ -o snake main.cpp -lSDL2
+g++ -o snake.out main.cpp -lSDL2

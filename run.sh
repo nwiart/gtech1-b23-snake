@@ -1,1 +1,1 @@
-DISPLAY=:0 ./snake
+DISPLAY=:0 ./snake.out
