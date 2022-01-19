@@ -103,12 +103,26 @@ void Renderer::pollWindowEvents()
 Texture* Renderer::createTexture( const char* path )
 {
 	SDL_Surface* surface = IMG_Load( path );
+	if ( !surface ) {
+		cout << "Failed to load texture \"" << path << "\"." << endl;
+		return 0;
+	}
+	
 	SDL_Texture* texture = SDL_CreateTextureFromSurface( this->renderer, surface );
 
 	SDL_FreeSurface( surface );
 
 	Texture* t = new Texture( texture );
 	return t;
+}
+
+#define DECOMPOSE_RGBA( rgba ) (rgba >> 24) & 0xFF, (rgba >> 16) & 0xFF, (rgba >> 8) & 0xFF, rgba & 0xFF
+
+void Renderer::drawRect( unsigned int color, int x, int y, int width, int height, int angle )
+{
+	SDL_Rect dest = { x, y, width, height };
+	SDL_SetRenderDrawColor( this->renderer, DECOMPOSE_RGBA( color ) );
+	SDL_RenderFillRect( this->renderer, &dest );
 }
 
 void Renderer::drawRect( Texture* t, int x, int y, int width, int height, int angle )

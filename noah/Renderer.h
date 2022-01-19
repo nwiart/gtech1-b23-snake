@@ -25,6 +25,7 @@ public:
 		/// path : path of the image, relative to the working directory.
 	Texture* createTexture( const char* path );
 
+	void drawRect( unsigned int color, int x, int y, int width, int height, int angle );
 	void drawRect( Texture* t, int x, int y, int width, int height, int angle );
 
 
