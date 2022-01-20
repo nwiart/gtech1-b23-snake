@@ -1,0 +1,19 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Diagramme1
+{
+int x, y;
+Diagramme2 b;
+void : SetXY(x, y)
+Diagramme2 : GetD2()
+Diagramme1()
+~Diagramme1()
+}
+Diagramme1 o-- Diagramme2
+
+class Diagramme2
+{
+int value;
+}
+@enduml
