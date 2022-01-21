@@ -24,7 +24,7 @@ Renderer::~Renderer()
 	SDL_Quit();
 }
 
-bool Renderer::initialize( int width, int height, int frameDelay )
+int Renderer::initialize( int width, int height, const char* title, int frameDelay )
 {
 	this->frameDelay = frameDelay;
 
@@ -32,12 +32,12 @@ bool Renderer::initialize( int width, int height, int frameDelay )
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
 		cout << "SDL init failed : " << SDL_GetError() << endl;
-		return false;
+		return EXIT_FAILURE;
 	}
 
 	// SDL window.
 	window = SDL_CreateWindow(
-		"Snake",
+		title,
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		width, height,
 		SDL_WINDOW_SHOWN );
@@ -45,7 +45,7 @@ bool Renderer::initialize( int width, int height, int frameDelay )
 	if ( !window )
 	{
 		cout << "SDL window creation failed : " << SDL_GetError() << endl;
-		return false;
+		return EXIT_FAILURE;
 	}
 
 	// SDL renderer.
@@ -54,7 +54,7 @@ bool Renderer::initialize( int width, int height, int frameDelay )
 	// Image loading.
 	IMG_Init( IMG_INIT_PNG );
 
-	return true;
+	return EXIT_SUCCESS;
 }
 
 void Renderer::beginRender()
@@ -107,7 +107,7 @@ Texture* Renderer::createTexture( const char* path )
 		cout << "Failed to load texture \"" << path << "\"." << endl;
 		return 0;
 	}
-	
+
 	SDL_Texture* texture = SDL_CreateTextureFromSurface( this->renderer, surface );
 
 	SDL_FreeSurface( surface );

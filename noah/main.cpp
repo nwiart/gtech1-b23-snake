@@ -11,7 +11,7 @@ int main()
 {
 	// Initialize renderer with window 640x640.
 	renderer = new Renderer();
-	if ( !renderer->initialize( 1024, 768 ) )
+	if ( renderer->initialize( 1024, 768, "Snake Game!" ) )
 	{
 		return 1;
 	}

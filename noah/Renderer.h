@@ -5,6 +5,8 @@ class Texture;
 struct SDL_Window;
 struct SDL_Renderer;
 
+	/// Renderer class managing the SDL window and renderer.
+	/// This class also provides methods for rendering colored and textured rectangles.
 class Renderer
 {
 public:
@@ -13,7 +15,7 @@ public:
 	~Renderer();
 
 		/// Initializes SDL objects and returns whether the initialization was successful.
-	bool initialize( int width, int height, int frameDelay = 20 );
+	int initialize( int width, int height, const char* title, int frameDelay = 20 );
 
 	void beginRender();
 	void endRender();
