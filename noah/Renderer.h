@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SNAKE_RENDERER_H
+#define SNAKE_RENDERER_H
 
 class Texture;
 
@@ -43,3 +44,5 @@ private:
 		/// Does the user want to close the window?
 	bool closeRequested;
 };
+
+#endif // SNAKE_RENDERER_H
