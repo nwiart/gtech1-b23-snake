@@ -130,3 +130,72 @@ void Renderer::drawRect( Texture* t, int x, int y, int width, int height, int an
 	SDL_Rect dest = { x, y, width, height };
 	SDL_RenderCopyEx( this->renderer, t->texture, 0, &dest, angle, 0, SDL_FLIP_NONE );
 }
+
+
+
+/// Digit constants. These strings indicate which rectangles in the 3x5 grid should be visible
+/// in order to represent a specific decimal digit.
+static const char* zero  = "xxxx xx xx xxxx";
+static const char* one   = "  x  x  x  x  x";
+static const char* two   = "xxx  xxxxx  xxx";
+static const char* three = "xxx  xxxx  xxxx";
+static const char* four  = "x xx xxxx  x  x";
+static const char* five  = "xxxx  xxx  xxxx";
+static const char* six   = "xxxx  xxxx xxxx";
+static const char* seven = "xxx  x  x  x  x";
+static const char* eight = "xxxx xxxxx xxxx";
+static const char* nine  = "xxxx xxxx  xxxx";
+
+static const char** digits[] = { &zero, &one, &two, &three, &four, &five, &six, &seven, &eight, &nine };
+
+static const int DIGIT_PIXEL_SIZE = 8;
+
+void Renderer::drawNumber( int number, int x, int y )
+{
+	int numDigits = 0;
+	int n = number;
+	while ( n )
+	{
+		numDigits++;
+		n /= 10;
+	}
+
+	while ( numDigits )
+	{
+		numDigits--;
+
+		drawDigit( number % 10, x + numDigits * 4 * DIGIT_PIXEL_SIZE, y );
+		number /= 10;
+	}
+}
+
+void Renderer::drawDigit( int digit, int xp, int yp )
+{
+	SDL_Rect rect = { 0, 0, 10, 10 };
+
+	/// Loop if overflow to prevent wrong memory access.
+	digit = digit % 10;
+
+	for ( int y = 0; y < 5; ++y )
+	{
+		for ( int x = 0; x < 3; ++x )
+		{
+			if ( (*(digits[digit]))[y * 3 + x] == 'x' )
+			{
+				// Draw shadow.
+				SDL_SetRenderDrawColor( this->renderer, 0, 0, 0, 255 );
+				rect.x = xp + x * DIGIT_PIXEL_SIZE + DIGIT_PIXEL_SIZE / 2;
+				rect.y = yp + y * DIGIT_PIXEL_SIZE + DIGIT_PIXEL_SIZE / 2;
+				SDL_RenderFillRect( this->renderer, &rect );
+
+				// Draw white square.
+				SDL_SetRenderDrawColor( this->renderer, 255, 255, 255, 255 );
+				rect.x -= 5;
+				rect.y -= 5;
+				rect.w = 10;
+				rect.h = 10;
+				SDL_RenderFillRect( this->renderer, &rect );
+			}
+		}
+	}
+}

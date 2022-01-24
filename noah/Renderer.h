@@ -28,8 +28,14 @@ public:
 		/// path : path of the image, relative to the working directory.
 	Texture* createTexture( const char* path );
 
+		/// Methods for drawing colored and textured quads.
 	void drawRect( unsigned int color, int x, int y, int width, int height, int angle );
 	void drawRect( Texture* t, int x, int y, int width, int height, int angle );
+
+		/// Method for drawing a number out of quads.
+		/// The number can have a maximum of two digits.
+	void drawNumber( int number, int x, int y );
+	void drawDigit( int digit, int x, int y );
 
 
 
