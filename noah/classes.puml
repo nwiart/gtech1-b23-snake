@@ -1,0 +1,66 @@
+@startuml
+
+class Renderer
+{
+SDL_Window* window;
+SDL_Renderer* renderer;
+unsigned int frameDelay;
+bool closeRequested;
+
+Renderer()
+~Renderer()
+int : initialize(width, height, title, frameDelay)
+
+void : beginRender()
+void : endRender()
+
+void : pollWindowEvents()
+bool : isCloseRequested()
+
+Texture* : createTexture( path )
+
+void : drawRect( color, x, y, width, height, angle );
+void : drawRect( texture, x, y, width, height, angle );
+void : drawNumber( number, x, y );
+void : drawDigit( digit, x, y );
+}
+
+Renderer -- Texture
+
+class Texture
+{
+SDL_Texture* texture;
+
+Texture( sdl_tex );
+~Texture();
+}
+
+
+
+class Snake
+{
+Segment* head;
+Segment* tail;
+int direction;
+
+void : move()
+
+void : grow()
+void : shrink()
+
+Segment* : addSegment( x, y )
+void : invertHeadAndTail()
+}
+
+Snake -- Segment
+
+class Segment
+{
+int posX;
+int posY;
+Segment* next;
+
+Segment( x, y )
+}
+
+@enduml
