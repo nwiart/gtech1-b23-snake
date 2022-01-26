@@ -171,7 +171,7 @@ void Renderer::drawNumber( int number, int x, int y )
 
 void Renderer::drawDigit( int digit, int xp, int yp )
 {
-	SDL_Rect rect = { 0, 0, 10, 10 };
+	SDL_Rect rect = { 0, 0, DIGIT_PIXEL_SIZE, DIGIT_PIXEL_SIZE };
 
 	/// Loop if overflow to prevent wrong memory access.
 	digit = digit % 10;
@@ -192,8 +192,6 @@ void Renderer::drawDigit( int digit, int xp, int yp )
 				SDL_SetRenderDrawColor( this->renderer, 255, 255, 255, 255 );
 				rect.x -= 5;
 				rect.y -= 5;
-				rect.w = 10;
-				rect.h = 10;
 				SDL_RenderFillRect( this->renderer, &rect );
 			}
 		}
