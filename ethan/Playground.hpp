@@ -3,19 +3,12 @@
 class Playground
 {
     public:
+        Playground(int Sizex, int Sizey);
 
-        Playground(int Sizex, int Sizey)
-        {
-            Fruits[0]
+        ~Playground();
 
-            int SDL_Update()
-            {
-                if snake->
-            }
-        }
-
-
-
+        void Update();
+        
     private:
         int Sizex;
         int Sizey;
