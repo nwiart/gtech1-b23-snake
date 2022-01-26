@@ -48,6 +48,10 @@ void SnakeRenderer::render( Snake* snake )
 		case DIRECTION_RIGHT: rotation =   0; break;
 		}
 
+		// Left turn.
+		if ( newDir < dir && !(dir == DIRECTION_RIGHT && newDir == DIRECTION_UP) || (dir == DIRECTION_UP && newDir == DIRECTION_RIGHT) )
+			rotation += 90;
+
 		// Determine which texture to use.
 		Texture* tex;
 		if      ( s == snake->getHead() ) tex = snakeHeadTex;

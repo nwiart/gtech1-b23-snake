@@ -51,11 +51,8 @@ int main()
 		{
 			movementTimer = 25;
 
-			if (keyStates[SDL_SCANCODE_W])
-			{
-				snake->setDirection( direction );
-				snake->move();
-			}
+			snake->setDirection( direction );
+			snake->move();
 		}
 		
 
