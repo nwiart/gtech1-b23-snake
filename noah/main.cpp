@@ -1,6 +1,7 @@
-#include "Renderer.h"
-
 #include "Snake.h"
+
+#include "Renderer.h"
+#include "SnakeRenderer.h"
 
 #include <SDL2/SDL.h>
 
@@ -23,21 +24,19 @@ int main()
 		return 1;
 	}
 
+	SnakeRenderer* snakeRenderer = new SnakeRenderer( renderer );
+
 	Texture* backgroundTex = renderer->createTexture( "res/background.png" );
 	Texture* terrainTex    = renderer->createTexture( "res/terrain.png" );
-	Texture* snakeHeadTex  = renderer->createTexture( "res/snake_head.png" );
-	Texture* snakeBodyTex  = renderer->createTexture( "res/snake_body.png" );
-	Texture* snakeTurnTex  = renderer->createTexture( "res/snake_turn.png" );
-	Texture* snakeTailTex  = renderer->createTexture( "res/snake_tail.png" );
 
-	Snake* snake = new Snake();
+	Snake* snake = new Snake( 5, 5 );
 
 
 
 	// Main game loop.
 	int movementTimer = 25;
 	int direction = snake->getDirection();
-	
+
 	while ( !renderer->isCloseRequested() )
 	{
 		// Game logic.
@@ -80,43 +79,7 @@ int main()
 
 
 
-		Segment* s = snake->getHead();
-		int dir = snake->getDirection();
-		while ( s )
-		{
-			// Get turn.
-			int newDir;
-			if ( s != snake->getTail() ) {
-				if ( s == snake->getHead() ) {
-					newDir = dir;
-				}
-				else {
-					newDir = Snake::getDirectionBewteen( s->next, s );
-				}
-			}
-
-			// Get texture rotation.
-			int rotation;
-			switch ( newDir )
-			{
-			case DIRECTION_UP:    rotation = -90; break;
-			case DIRECTION_DOWN:  rotation =  90; break;
-			case DIRECTION_LEFT:  rotation = 180; break;
-			case DIRECTION_RIGHT: rotation =   0; break;
-			}
-
-			// Determine which texture to use.
-			Texture* tex;
-			if      ( s == snake->getHead() ) tex = snakeHeadTex;
-			else if ( s == snake->getTail() ) tex = snakeTailTex;
-			else if ( newDir != dir )         tex = snakeTurnTex;
-			else                              tex = snakeBodyTex;
-
-			renderer->drawRect( tex, s->posX * 64, s->posY * 64, 64, 64, rotation );
-
-			s = s->next;
-			dir = newDir;
-		}
+		snakeRenderer->render( snake );
 		
 		renderer->endRender();
 		renderer->pollWindowEvents();

@@ -55,7 +55,7 @@ bool Snake::collides() const
 	while ( s )
 	{
 		// Head overlaps with segment s.
-		if ( s->posY == this->head->posX && s->posY == this->head->posY )
+		if ( s->posX == this->head->posX && s->posY == this->head->posY )
 			return true;
 
 		s = s->next;

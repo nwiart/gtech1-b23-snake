@@ -27,6 +27,7 @@ public:
 		/// Create a texture from an image on disk.
 		/// path : path of the image, relative to the working directory.
 	Texture* createTexture( const char* path );
+	void destroyTexture( Texture* t );
 
 		/// Methods for drawing colored and textured quads.
 	void drawRect( unsigned int color, int x, int y, int width, int height, int angle );
