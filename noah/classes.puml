@@ -18,6 +18,7 @@ void : pollWindowEvents()
 bool : isCloseRequested()
 
 Texture* : createTexture( path )
+void : destroyTexture( tex )
 
 void : drawRect( color, x, y, width, height, angle );
 void : drawRect( texture, x, y, width, height, angle );

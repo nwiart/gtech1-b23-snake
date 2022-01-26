@@ -116,6 +116,11 @@ Texture* Renderer::createTexture( const char* path )
 	return t;
 }
 
+void Renderer::destroyTexture( Texture* t )
+{
+	delete t;
+}
+
 #define DECOMPOSE_RGBA( rgba ) (rgba >> 24) & 0xFF, (rgba >> 16) & 0xFF, (rgba >> 8) & 0xFF, rgba & 0xFF
 
 void Renderer::drawRect( unsigned int color, int x, int y, int width, int height, int angle )
