@@ -43,13 +43,25 @@ Segment* head;
 Segment* tail;
 int direction;
 
+Snake( x, y )
+~Snake()
+
 void : move()
+bool : collides()
 
-void : grow()
-void : shrink()
+Segment* : getHead()
+Segment* : getTail()
 
-Segment* : addSegment( x, y )
-void : invertHeadAndTail()
+int : getHeadPosX()
+int : getHeadPosY()
+
+int : getDirection()
+void : setDirection( dir )
+
+static int : getDirectionBewteen( s0, s1 )
+
+void : addSegment()
+void : moveTailToHead()
 }
 
 Snake -- Segment

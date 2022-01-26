@@ -8,9 +8,9 @@ Segment::Segment( int x, int y )
 }
 
 
-Snake::Snake()
+Snake::Snake( int x, int y )
 {
-	this->head = new Segment( 5, 5 );
+	this->head = new Segment( x, y );
 	this->tail = this->head;
 	this->direction = 0;
 
@@ -37,25 +37,9 @@ Snake::~Snake()
 
 void Snake::move()
 {
-	// Find second to last and make it the last.
-	Segment* secondLast = this->head;
-	while ( secondLast->next != this->tail )
-	{
-		secondLast = secondLast->next;
-	}
+	this->moveTailToHead();
 
-	secondLast->next = 0;
-
-	// Set next to last as head.
-	this->tail->next = this->head;
-
-	// Make last as head.
-	this->tail->posX = this->head->posX;
-	this->tail->posY = this->head->posY;
-	this->head = this->tail;
-
-	this->tail = secondLast;
-
+	// Then move head.
 	switch ( direction )
 	{
 	case DIRECTION_UP:    this->head->posY--; break;
@@ -63,6 +47,21 @@ void Snake::move()
 	case DIRECTION_LEFT:  this->head->posX--; break;
 	case DIRECTION_RIGHT: this->head->posX++; break;
 	}
+}
+
+bool Snake::collides() const
+{
+	Segment* s = this->head->next;
+	while ( s )
+	{
+		// Head overlaps with segment s.
+		if ( s->posY == this->head->posX && s->posY == this->head->posY )
+			return true;
+
+		s = s->next;
+	}
+
+	return false;
 }
 
 Segment* Snake::getHead() const
@@ -109,4 +108,26 @@ void Snake::addSegment()
 {
 	this->tail->next = new Segment( this->tail->posX, this->tail->posY + 1 );
 	this->tail = this->tail->next;
+}
+
+void Snake::moveTailToHead()
+{
+	// Find second to last and make it the last.
+	Segment* secondLast = this->head;
+	while ( secondLast->next != this->tail )
+	{
+		secondLast = secondLast->next;
+	}
+
+	secondLast->next = 0;
+
+	// Set next to last as head.
+	this->tail->next = this->head;
+
+	// Make last as head.
+	this->tail->posX = this->head->posX;
+	this->tail->posY = this->head->posY;
+	this->head = this->tail;
+
+	this->tail = secondLast;
 }
