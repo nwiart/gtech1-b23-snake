@@ -90,6 +90,20 @@ void Snake::setDirection( int dir )
 	this->direction = dir;
 }
 
+int Snake::getLength() const
+{
+	int l = 0;
+	Segment* s = this->head;
+	
+	while ( s )
+	{
+		l++;
+		s = s->next;
+	}
+
+	return l;
+}
+
 int Snake::getDirectionBewteen( Segment* s0, Segment* s1 )
 {
 	if      ( s1->posY < s0->posY ) return DIRECTION_UP;

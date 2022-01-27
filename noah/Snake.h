@@ -51,6 +51,9 @@ public:
 	int getDirection() const;
 	void setDirection( int dir );
 
+		/// Compute the snake's length.
+	int getLength() const;
+
 		/// Get the direction from two adjacent segments.
 	static int getDirectionBewteen( Segment* s0, Segment* s1 );
 
