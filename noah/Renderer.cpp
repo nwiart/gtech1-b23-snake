@@ -154,7 +154,7 @@ int Renderer::getWindowHeight() const
 /// Digit constants. These strings indicate which rectangles in the 3x5 grid should be visible
 /// in order to represent a specific decimal digit.
 static const char* zero  = "xxxx xx xx xxxx";
-static const char* one   = "  x  x  x  x  x";
+static const char* one   = "xx  x  x  x xxx";
 static const char* two   = "xxx  xxxxx  xxx";
 static const char* three = "xxx  xxxx  xxxx";
 static const char* four  = "x xx xxxx  x  x";
