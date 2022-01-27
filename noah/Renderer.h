@@ -37,12 +37,18 @@ public:
 	void drawNumber( int number, int x, int y );
 	void drawDigit( int digit, int x, int y );
 
+	int getWindowWidth() const;
+	int getWindowHeight() const;
+
 
 
 private:
 
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+
+	int width;
+	int height;
 
 		/// Time interval between frames in milliseconds.
 	unsigned int frameDelay;

@@ -1,15 +1,20 @@
 #include "Snake.h"
 
 #include "Renderer.h"
-#include "SnakeRenderer.h"
+#include "State.h"
 
 #include <SDL2/SDL.h>
 
 #include <stdlib.h>
 #include <time.h>
 
+
+
 // Game renderer.
 Renderer* renderer = 0;
+
+void init();
+void renderGameOver();
 
 
 
@@ -19,41 +24,23 @@ int main()
 
 	// Initialize renderer with window 640x640.
 	renderer = new Renderer();
-	if ( renderer->initialize( 1024, 768, "Snake Game!" ) )
+	if ( renderer->initialize( 1024, 768, "Snake Game!", 20 ) )
 	{
 		return 1;
 	}
 
-	SnakeRenderer* snakeRenderer = new SnakeRenderer( renderer );
-
 	Texture* backgroundTex = renderer->createTexture( "res/background.png" );
 	Texture* terrainTex    = renderer->createTexture( "res/terrain.png" );
 
-	Snake* snake = new Snake( 5, 5 );
+	State* state = new StatePlaying( renderer );
 
 
 
 	// Main game loop.
-	int movementTimer = 25;
-	int direction = snake->getDirection();
-
 	while ( !renderer->isCloseRequested() )
 	{
 		// Game logic.
-		const Uint8* keyStates = SDL_GetKeyboardState( NULL );
-		if ( keyStates[SDL_SCANCODE_UP]    && snake->getDirection() != DIRECTION_DOWN )  direction = DIRECTION_UP;
-		if ( keyStates[SDL_SCANCODE_DOWN]  && snake->getDirection() != DIRECTION_UP )    direction = DIRECTION_DOWN;
-		if ( keyStates[SDL_SCANCODE_LEFT]  && snake->getDirection() != DIRECTION_RIGHT ) direction = DIRECTION_LEFT;
-		if ( keyStates[SDL_SCANCODE_RIGHT] && snake->getDirection() != DIRECTION_LEFT )  direction = DIRECTION_RIGHT;
-
-		movementTimer--;
-		if ( movementTimer == 0 )
-		{
-			movementTimer = 25;
-
-			snake->setDirection( direction );
-			snake->move();
-		}
+		State* newState = state->update();
 		
 
 
@@ -68,18 +55,25 @@ int main()
 		}
 
 		// Render grid terrain.
-		for ( int x = 0; x < 16; ++x ) {
-			for ( int y = 0; y < 10; ++y ) {
-				renderer->drawRect( terrainTex, x * 64, y * 64 + 128, 64, 64, 0 );
+		for ( int x = 0; x < 32; ++x ) {
+			for ( int y = 0; y < 20; ++y ) {
+				renderer->drawRect( terrainTex, x * 32, y * 32 + 128, 32, 32, 0 );
 			}
 		}
 
-
-
-		snakeRenderer->render( snake );
+		state->render();
 		
 		renderer->endRender();
 		renderer->pollWindowEvents();
+
+
+
+		// State switching.
+		if ( newState )
+		{
+			delete state;
+			state = newState;
+		}
 	}
 
 

@@ -28,6 +28,9 @@ int Renderer::initialize( int width, int height, const char* title, int frameDel
 {
 	this->frameDelay = frameDelay;
 
+	this->width  = width;
+	this->height = height;
+
 	// SDL init.
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
@@ -72,22 +75,20 @@ void Renderer::pollWindowEvents()
 {
 	// Process all events.
 	SDL_Event e;
-	while ( SDL_PollEvent(&e) != 0 )
+	while ( SDL_PollEvent(&e) )
 	{
-		switch ( e.type )
+		if ( e.type == SDL_QUIT )
 		{
-		case SDL_QUIT:
 			closeRequested = true;
-			break;
-
-		case SDL_KEYDOWN:
+		}
+		else if ( e.type == SDL_KEYDOWN )
+		{
 			switch ( e.key.keysym.sym )
 			{
 			case SDLK_ESCAPE:
 				closeRequested = true;
 				break;
 			}
-			break;
 		}
 	}
 
@@ -95,9 +96,11 @@ void Renderer::pollWindowEvents()
 	static Uint32 frameTime, lastFrameTime = 0;
 	frameTime = SDL_GetTicks();
 	
-	if ( (frameTime - lastFrameTime) < frameDelay )
+	SDL_Delay( frameDelay );
+
+	/*if ( (frameTime - lastFrameTime) < frameDelay )
 		SDL_Delay( frameDelay - (frameTime - lastFrameTime) );
-	lastFrameTime = frameTime;
+	lastFrameTime = frameTime;*/
 }
 
 Texture* Renderer::createTexture( const char* path )
@@ -136,6 +139,16 @@ void Renderer::drawRect( Texture* t, int x, int y, int width, int height, int an
 	SDL_RenderCopyEx( this->renderer, t->texture, 0, &dest, angle, 0, SDL_FLIP_NONE );
 }
 
+int Renderer::getWindowWidth() const
+{
+	return width;
+}
+
+int Renderer::getWindowHeight() const
+{
+	return height;
+}
+
 
 
 /// Digit constants. These strings indicate which rectangles in the 3x5 grid should be visible
@@ -153,7 +166,7 @@ static const char* nine  = "xxxx xxxx  xxxx";
 
 static const char** digits[] = { &zero, &one, &two, &three, &four, &five, &six, &seven, &eight, &nine };
 
-static const int DIGIT_PIXEL_SIZE = 8;
+static const int DIGIT_PIXEL_SIZE = 5;
 
 void Renderer::drawNumber( int number, int x, int y )
 {
@@ -189,14 +202,14 @@ void Renderer::drawDigit( int digit, int xp, int yp )
 			{
 				// Draw shadow.
 				SDL_SetRenderDrawColor( this->renderer, 0, 0, 0, 255 );
-				rect.x = xp + x * DIGIT_PIXEL_SIZE + DIGIT_PIXEL_SIZE / 2;
-				rect.y = yp + y * DIGIT_PIXEL_SIZE + DIGIT_PIXEL_SIZE / 2;
+				rect.x = xp + x * DIGIT_PIXEL_SIZE + DIGIT_PIXEL_SIZE;
+				rect.y = yp + y * DIGIT_PIXEL_SIZE + DIGIT_PIXEL_SIZE;
 				SDL_RenderFillRect( this->renderer, &rect );
 
 				// Draw white square.
 				SDL_SetRenderDrawColor( this->renderer, 255, 255, 255, 255 );
-				rect.x -= 5;
-				rect.y -= 5;
+				rect.x -= DIGIT_PIXEL_SIZE;
+				rect.y -= DIGIT_PIXEL_SIZE;
 				SDL_RenderFillRect( this->renderer, &rect );
 			}
 		}
