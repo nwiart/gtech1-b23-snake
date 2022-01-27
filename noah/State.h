@@ -56,7 +56,7 @@ class StateGameOver : public State
 {
 public:
 
-	StateGameOver( Renderer* r );
+	StateGameOver( Renderer* r, int score, int length );
 
 	virtual State* update() override;
 	virtual void   render() override;
@@ -65,7 +65,11 @@ private:
 
 	Texture* snakeGameOverTex;
 	Texture* gameOverTextTex;
+	Texture* gameOverScoresTex;
 	Texture* gameOverInstructionsTex;
+
+	int score;
+	int length;
 };
 
 

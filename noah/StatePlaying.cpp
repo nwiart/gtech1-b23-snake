@@ -9,7 +9,7 @@
 
 
 StatePlaying::StatePlaying( Renderer* r )
-	: State( r ), score( 0 ), movementTimer( 2 ), deadTimer( 100 ), dead( false ), snakeRenderer( 0 )
+	: State( r ), score( 0 ), movementTimer( 5 ), deadTimer( 100 ), dead( false ), snakeRenderer( 0 )
 {
 	this->snake = new Snake( 5, 10 );
 	this->direction = snake->getDirection();
@@ -28,7 +28,7 @@ State* StatePlaying::update()
 	movementTimer--;
 	if ( movementTimer == 0 )
 	{
-		movementTimer = 2;
+		movementTimer = 5;
 
 		if (keyStates[SDL_SCANCODE_W]) snake->addSegment();
 
@@ -51,7 +51,7 @@ State* StatePlaying::update()
 		deadTimer--;
 
 		if ( deadTimer == 0 ) {
-			return new StateGameOver( this->renderer );
+			return new StateGameOver( this->renderer, this->score, this->snake->getLength() );
 		}
 	}
 
