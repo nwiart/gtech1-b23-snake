@@ -7,6 +7,7 @@ class Texture;
 class SnakeRenderer;
 
 class Snake;
+class Fruit;
 
 class State
 {
@@ -37,6 +38,7 @@ public:
 
 	virtual State* update() override;
 	virtual void   render() override;
+	void fruit_set(Fruit* f);
 
 
 private:
@@ -49,8 +51,12 @@ private:
 	int movementTimer;
 	int deadTimer;
 	bool dead;
+	Fruit* Fruits[2];
 
 	SnakeRenderer* snakeRenderer;
+
+	Texture* GoodFruitTex;
+	Texture* BadFruitTex;
 };
 
 
@@ -74,6 +80,9 @@ private:
 	int score;
 	int length;
 };
+
+
+
 
 
 #endif // SNAKE_GAMESTATE_H
