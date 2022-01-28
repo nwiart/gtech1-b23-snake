@@ -1,0 +1,97 @@
+@startuml
+
+class Renderer
+{
+	SDL_Window* window;
+	SDL_Renderer* renderer;
+	unsigned int frameDelay;
+	bool closeRequested;
+
+	Renderer()
+	~Renderer()
+	int : initialize(width, height, title, frameDelay)
+
+	void : beginRender()
+	void : endRender()
+
+	void : pollWindowEvents()
+	bool : isCloseRequested()
+
+	Texture* : createTexture( path )
+	void : destroyTexture( tex )
+
+	void : drawRect( color, x, y, width, height, angle );
+	void : drawRect( texture, x, y, width, height, angle );
+	void : drawNumber( number, x, y );
+	void : drawDigit( digit, x, y );
+}
+
+Renderer -- Texture
+
+class Texture
+{
+	SDL_Texture* texture;
+
+	Texture( sdl_tex );
+	~Texture();
+}
+
+Renderer -- SnakeRenderer
+Texture -- SnakeRenderer
+
+class SnakeRenderer
+{
+	Renderer* renderer;
+
+	Texture* snakeHeadTex;
+	Texture* snakeBodyTex;
+	Texture* snakeTurnTex;
+	Texture* snakeTailTex;
+
+	SnakeRenderer( renderer )
+	~SnakeRenderer()
+
+	void : render( snake )
+}
+
+
+
+class Snake
+{
+	Segment* head;
+	Segment* tail;
+	int direction;
+
+	Snake( x, y )
+	~Snake()
+
+	void : move()
+	bool : collides()
+
+	Segment* : getHead()
+	Segment* : getTail()
+
+	int : getHeadPosX()
+	int : getHeadPosY()
+
+	int : getDirection()
+	void : setDirection( dir )
+
+	static int : getDirectionBewteen( s0, s1 )
+
+	void : addSegment()
+	void : moveTailToHead()
+}
+
+Snake -- Segment
+
+class Segment
+{
+	int posX;
+	int posY;
+	Segment* next;
+
+	Segment( x, y )
+}
+
+@enduml
