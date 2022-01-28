@@ -33,9 +33,11 @@ class StatePlaying : public State
 public:
 
 	StatePlaying( Renderer* r );
+	~StatePlaying();
 
 	virtual State* update() override;
 	virtual void   render() override;
+
 
 private:
 
@@ -57,6 +59,7 @@ class StateGameOver : public State
 public:
 
 	StateGameOver( Renderer* r, int score, int length );
+	~StateGameOver();
 
 	virtual State* update() override;
 	virtual void   render() override;

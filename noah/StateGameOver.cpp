@@ -15,6 +15,14 @@ StateGameOver::StateGameOver( Renderer* r, int score, int length )
 	gameOverInstructionsTex = renderer->createTexture( "res/gameover_instructions.png" );
 }
 
+StateGameOver::~StateGameOver()
+{
+	renderer->destroyTexture( snakeGameOverTex );
+	renderer->destroyTexture( gameOverTextTex );
+	renderer->destroyTexture( gameOverScoresTex );
+	renderer->destroyTexture( gameOverInstructionsTex );
+}
+
 State* StateGameOver::update()
 {
 	const Uint8* keyStates = SDL_GetKeyboardState( 0 );

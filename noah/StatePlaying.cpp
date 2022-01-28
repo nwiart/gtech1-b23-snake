@@ -17,6 +17,12 @@ StatePlaying::StatePlaying( Renderer* r )
 	this->snakeRenderer = new SnakeRenderer( r );
 }
 
+StatePlaying::~StatePlaying()
+{
+	delete this->snake;
+	delete this->snakeRenderer;
+}
+
 State* StatePlaying::update()
 {
 	const Uint8* keyStates = SDL_GetKeyboardState( NULL );
