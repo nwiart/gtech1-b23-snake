@@ -59,7 +59,7 @@ void SnakeRenderer::render( Snake* snake )
 		else if ( newDir != dir )         tex = snakeTurnTex;
 		else                              tex = snakeBodyTex;
 
-		renderer->drawRect( tex, s->posX * 32, s->posY * 32, 32, 32, rotation );
+		renderer->drawRect( tex, s->posX * 32, s->posY * 32 + 128, 32, 32, rotation );
 
 		s = s->next;
 		dir = newDir;
