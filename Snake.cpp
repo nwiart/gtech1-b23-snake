@@ -11,10 +11,9 @@ Segment::Segment( int x, int y )
 Snake::Snake( int x, int y )
 {
 	this->head = new Segment( x, y );
-	this->tail = this->head;
+	this->tail = new Segment( x, y + 1 );
+	this->head->next = this->tail;
 	this->direction = 0;
-
-	this->addSegment();
 }
 
 Snake::~Snake()
@@ -113,7 +112,16 @@ int Snake::getDirectionBewteen( Segment* s0, Segment* s1 )
 
 void Snake::addSegment()
 {
-	this->tail->next = new Segment( this->tail->posX, this->tail->posY + 1 );
+	// Find second to last.
+	Segment* secondLast = this->head;
+	while ( secondLast->next != this->tail ) {
+		secondLast = secondLast->next;
+	}
+
+	int dx = this->tail->posX - secondLast->posX;
+	int dy = this->tail->posY - secondLast->posY;
+
+	this->tail->next = new Segment( this->tail->posX + dx, this->tail->posY + dy );
 	this->tail = this->tail->next;
 }
 
