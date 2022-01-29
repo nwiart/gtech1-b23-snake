@@ -53,6 +53,7 @@ int Renderer::initialize( int width, int height, const char* title, int frameDel
 
 	// SDL renderer.
 	renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
+	SDL_SetRenderDrawBlendMode( renderer, SDL_BLENDMODE_BLEND );
 
 	// Image loading.
 	IMG_Init( IMG_INIT_PNG );

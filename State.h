@@ -64,6 +64,8 @@ private:
 
 	int score;
 
+	int milliseconds;
+	int brightness;
 	int movementTimer;
 	int deadTimer;
 	bool dead;
