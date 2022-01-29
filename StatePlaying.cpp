@@ -57,23 +57,29 @@ State* StatePlaying::update()
 	{
 		movementTimer = 5;
 
-		if (keyStates[SDL_SCANCODE_W]) snake->addSegment();
-
 		if ( !dead )
 		{
+			// Update snake position and move by one.
 			snake->setDirection( direction );
 			snake->move();
 
+			// Is snake over the first fruit.
 			if (snake->getHeadPosX() == Fruits[0]->x && snake->getHeadPosY() == Fruits[0]->y)
 			{
+				score += 10;
+				snake->addSegment();
+
 				fruit_set(Fruits[0]);
 				fruit_set(Fruits[1]);
 			}
 
-
-			score += 10;
-
-			if ( snake->collides() )
+			// Is snake colliding with itself or with the walls.
+			bool collides = snake->collides();
+			collides = collides || snake->getHeadPosX() < 0;
+			collides = collides || snake->getHeadPosY() < 0;
+			collides = collides || snake->getHeadPosX() >= State::GRID_SIZE_X;
+			collides = collides || snake->getHeadPosY() >= State::GRID_SIZE_Y;
+			if ( collides )
 			{
 				dead = true;
 			}
@@ -110,8 +116,10 @@ void StatePlaying::render()
 	// Render both fruits.
 	const int tileSizeX = State::getTileSizeX();
 	const int tileSizeY = State::getTileSizeY();
-	renderer->drawRect(GoodFruitTex, Fruits[0]->x * tileSizeX, Fruits[0]->y * tileSizeY + 128, tileSizeX, tileSizeY, 0);
-	renderer->drawRect(BadFruitTex, Fruits[1]->x * tileSizeX, Fruits[1]->y * tileSizeY + 128, tileSizeX, tileSizeY, 0);
+	float fruitRotation = sin(SDL_GetTicks() / 1000.0F * 3.0F) * 30.0F;
+
+	renderer->drawRect(GoodFruitTex, Fruits[0]->x * tileSizeX, Fruits[0]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
+	renderer->drawRect(BadFruitTex, Fruits[1]->x * tileSizeX, Fruits[1]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
 
 	// Render score.
 	renderer->drawRect( 0x604020FF, 15, 15, 5 * 3 * 5 + 4 * 5 + 10, 35, 0 );
