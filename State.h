@@ -13,7 +13,7 @@ class State
 {
 public:
 
-	State( Renderer* r ) : renderer( r ) { }
+	State() { }
 
 		/// Update method. This steps the game logic associated with this game state.
 		/// Additionally, the method can return a new state for the game to open next.
@@ -23,9 +23,25 @@ public:
 		/// The render method. This renders all elements necessary for the game.
 	virtual void   render() = 0;
 
+	static void setRenderer( Renderer* r );
+
+		/// Calculate the size of each grid tile, in pixels.
+		// NOTE : We subtract 128 to Y because the trees are not part of the grid.
+	static int getTileSizeX();
+	static int getTileSizeY();
+
+
+
 protected:
 
-	Renderer* renderer;
+	static Renderer* renderer;
+
+public:
+
+		/// Grid size constants.
+		/// Values are specified in tiles.
+	static const int GRID_SIZE_X = 32;
+	static const int GRID_SIZE_Y = 20;
 };
 
 
@@ -33,7 +49,7 @@ class StatePlaying : public State
 {
 public:
 
-	StatePlaying( Renderer* r );
+	StatePlaying();
 	~StatePlaying();
 
 	virtual State* update() override;
@@ -64,7 +80,7 @@ class StateGameOver : public State
 {
 public:
 
-	StateGameOver( Renderer* r, int score, int length );
+	StateGameOver( int score, int length );
 	~StateGameOver();
 
 	virtual State* update() override;

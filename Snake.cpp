@@ -40,9 +40,6 @@ void Snake::move()
 	case DIRECTION_LEFT:  this->head->posX--; break;
 	case DIRECTION_RIGHT: this->head->posX++; break;
 	}
-
-	if ( this->head->posX <  0 )  this->head->posX = 31;
-	if ( this->head->posX >= 32 ) this->head->posX = 0;
 }
 
 bool Snake::collides() const

@@ -3,6 +3,7 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include "Snake.h"
+#include "State.h"
 
 SnakeRenderer::SnakeRenderer( Renderer* r )
 	: renderer( r )
@@ -23,8 +24,12 @@ SnakeRenderer::~SnakeRenderer()
 
 void SnakeRenderer::render( Snake* snake )
 {
+	const int tileSizeX = State::getTileSizeX();
+	const int tileSizeY = State::getTileSizeY();
+
 	Segment* s = snake->getHead();
 	int dir = snake->getDirection();
+
 	while ( s )
 	{
 		// Get turn.
@@ -59,7 +64,7 @@ void SnakeRenderer::render( Snake* snake )
 		else if ( newDir != dir )         tex = snakeTurnTex;
 		else                              tex = snakeBodyTex;
 
-		renderer->drawRect( tex, s->posX * 32, s->posY * 32 + 128, 32, 32, rotation );
+		renderer->drawRect( tex, s->posX * tileSizeX, s->posY * tileSizeY + 128, tileSizeX, tileSizeY, rotation );
 
 		s = s->next;
 		dir = newDir;

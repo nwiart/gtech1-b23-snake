@@ -8,6 +8,9 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define WINDOW_WIDTH  1024
+#define WINDOW_HEIGHT 768
+
 
 
 // Game renderer.
@@ -22,9 +25,9 @@ int main()
 {
 	srand( time( 0 ) );
 
-	// Initialize renderer with window 640x640.
+	// Initialize renderer with window 1024x768
 	renderer = new Renderer();
-	if ( renderer->initialize( 1024, 768, "Snake Game!", 20 ) )
+	if ( renderer->initialize( WINDOW_WIDTH, WINDOW_HEIGHT, "Snake Game!", 20 ) )
 	{
 		return 1;
 	}
@@ -32,7 +35,8 @@ int main()
 	Texture* backgroundTex = renderer->createTexture( "res/background.png" );
 	Texture* terrainTex    = renderer->createTexture( "res/terrain.png" );
 
-	State* state = new StatePlaying( renderer );
+	State::setRenderer( renderer );
+	State* state = new StatePlaying();
 
 
 
@@ -55,9 +59,11 @@ int main()
 		}
 
 		// Render grid terrain.
-		for ( int x = 0; x < 32; ++x ) {
-			for ( int y = 0; y < 20; ++y ) {
-				renderer->drawRect( terrainTex, x * 32, y * 32 + 128, 32, 32, 0 );
+		const int tileSizeX = State::getTileSizeX();
+		const int tileSizeY = State::getTileSizeY();
+		for ( int x = 0; x < State::GRID_SIZE_X; ++x ) {
+			for ( int y = 0; y < State::GRID_SIZE_Y; ++y ) {
+				renderer->drawRect( terrainTex, x * tileSizeX, y * tileSizeY + 128, tileSizeX, tileSizeY, 0 );
 			}
 		}
 

@@ -5,10 +5,17 @@
 
 #include <SDL2/SDL.h>
 
+#include <iostream>
 
-StateGameOver::StateGameOver( Renderer* r, int score, int length )
-	: State( r ), score( score ), length( length )
+
+StateGameOver::StateGameOver( int score, int length )
+	: score( score ), length( length )
 {
+	if ( !renderer ) {
+		std::cout << "You haven't set a renderer in the State class. Specify a valid one before creating a State object.\n";
+		return;
+	}
+
 	snakeGameOverTex = renderer->createTexture( "res/snake_gameover.png" );
 	gameOverTextTex = renderer->createTexture( "res/gameover_text.png" );
 	gameOverScoresTex = renderer->createTexture( "res/gameover_scores.png" );
@@ -28,7 +35,7 @@ State* StateGameOver::update()
 	const Uint8* keyStates = SDL_GetKeyboardState( 0 );
 	if ( keyStates[SDL_SCANCODE_RETURN] )
 	{
-		return new StatePlaying( this->renderer );
+		return new StatePlaying();
 	}
 
 	return 0;
