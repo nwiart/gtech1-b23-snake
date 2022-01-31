@@ -36,30 +36,20 @@ void Playground::fruit_set(Fruit* f)
 
     f->x = posx_fruit;
     f->y = posy_fruit;
-}
+    Segment* s = s->head;
 
-
-
-    /*while (s)
+    while (s)
     {
 
+        if s->posX == f->x && s->posY == f->y
+        { 
+            posx_fruit = Utils::randomInt( 0, this->Sizex );
+            posy_fruit = Utils::randomInt( 0, this->Sizey ); 
+            s = s->head;
 
-
-        
-        if s->posX == fr->x and s->posY == fr->posY
-        {
-            int posx_fruit = Utils::randomInt( 0, tab_size->Sizex );
-            int posy_fruit = Utils::randomInt( 0, tab_size->Sizey );
-            pomme = Fruit("GOOD",posx_fruit,posy_fruit);
+            continue;
         }
-        
-
         s = s->next;
     }
-    Fruit("GOOD",posx_fruit,posy_fruit)* pomme; */
-
+    Fruit("GOOD",posx_fruit,posy_fruit)* pomme; 
 }
-
-
-
-

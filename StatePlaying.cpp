@@ -121,6 +121,21 @@ void StatePlaying::fruit_set(Fruit* f)
     int posx_fruit = Utils::randomInt( 0, State::GRID_SIZE_X );
     int posy_fruit = Utils::randomInt( 0, State::GRID_SIZE_Y ); 
 
+    Segment* s = snake->getHead();
+
+    while (s)
+    {
+
+        if s->posX == posx_fruit && s->posY == posy_fruit
+        { 
+            posx_fruit = Utils::randomInt( 0, this->Sizex );
+            posy_fruit = Utils::randomInt( 0, this->Sizey ); 
+            s = s->head;
+
+            continue;
+        }
+        s = s->next;
+    }
     f->x = posx_fruit;
     f->y = posy_fruit;
 }
