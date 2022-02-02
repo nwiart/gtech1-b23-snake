@@ -27,6 +27,7 @@ StatePlaying::StatePlaying()
 	
 	Fruits[0] = new Fruit(Fruit::GOOD,0,0);
     Fruits[1] = new Fruit(Fruit::BAD,0,0);
+	Fruits[1]->active = false;
 
 	fruit_set(Fruits[0]);
 	fruit_set(Fruits[1]);
@@ -73,6 +74,20 @@ State* StatePlaying::update()
 
 				fruit_set(Fruits[0]);
 				fruit_set(Fruits[1]);
+			}
+			Fruits[1]->active = (score >= 50);
+			
+
+			if (Fruits[1]->active)
+			{
+				if (snake->getHeadPosX() == Fruits[1]->x && snake->getHeadPosY() == Fruits[1]->y)
+				{
+					score -= 10;
+					snake->removeSegment();
+
+					fruit_set(Fruits[0]);
+					fruit_set(Fruits[1]);
+				}
 			}
 
 			// Is snake colliding with itself or with the walls.
@@ -126,11 +141,11 @@ void StatePlaying::fruit_set(Fruit* f)
     while (s)
     {
 
-        if s->posX == posx_fruit && s->posY == posy_fruit
+        if (s->posX == posx_fruit && s->posY == posy_fruit)
         { 
-            posx_fruit = Utils::randomInt( 0, this->Sizex );
-            posy_fruit = Utils::randomInt( 0, this->Sizey ); 
-            s = s->head;
+            posx_fruit = Utils::randomInt( 0, this->GRID_SIZE_X );
+            posy_fruit = Utils::randomInt( 0, this->GRID_SIZE_Y ); 
+            s = snake->getHead();
 
             continue;
         }
@@ -152,7 +167,10 @@ void StatePlaying::render()
 	float fruitRotation = sin(SDL_GetTicks() / 1000.0F * 3.0F) * 30.0F;
 
 	renderer->drawRect(GoodFruitTex, Fruits[0]->x * tileSizeX, Fruits[0]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
-	renderer->drawRect(BadFruitTex, Fruits[1]->x * tileSizeX, Fruits[1]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
+	if (Fruits[1]->active)
+	{
+		renderer->drawRect(BadFruitTex, Fruits[1]->x * tileSizeX, Fruits[1]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
+	}
 
 	// Brightness transparent plane.
 	int color = 0; color |= (255 - brightness);

@@ -99,6 +99,27 @@ private:
 	int length;
 };
 
+class StateMainMenu : public State
+{
+public:
+
+	StateMainMenu();
+	~StateMainMenu();
+
+	virtual State* update() override;
+	virtual void   render() override;
+
+private:
+
+	Texture* snakeGameOverTex;
+	Texture* gameOverTextTex;
+	Texture* gameOverScoresTex;
+	Texture* gameOverInstructionsTex;
+
+	int score;
+	int length;
+};
+
 
 
 

@@ -65,6 +65,9 @@ public:
 		/// The newly created segment becomes the new tail.
 	void addSegment();
 
+
+	void removeSegment();
+
 		/// Moves the tail segment to the head segment and rearranges the necessary pointers.
 		/// This is used by move() to reuse segments instead of deleting and recreating new ones.
 	void moveTailToHead();

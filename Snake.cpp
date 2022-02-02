@@ -125,6 +125,22 @@ void Snake::addSegment()
 	this->tail = this->tail->next;
 }
 
+void Snake::removeSegment()
+{
+	// Find second to last.
+	Segment* secondLast = this->head;
+	while ( secondLast->next != this->tail ) {
+		secondLast = secondLast->next;
+	}
+
+	int dx = this->tail->posX - secondLast->posX;
+	int dy = this->tail->posY - secondLast->posY;
+
+	delete this->tail;
+	this->tail = secondLast;
+	secondLast->next = 0;
+}
+
 void Snake::moveTailToHead()
 {
 	// Find second to last and make it the last.

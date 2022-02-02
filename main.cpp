@@ -36,7 +36,7 @@ int main()
 	Texture* terrainTex    = renderer->createTexture( "res/terrain.png" );
 
 	State::setRenderer( renderer );
-	State* state = new StatePlaying();
+	State* state = new StateMainMenu();
 
 
 
