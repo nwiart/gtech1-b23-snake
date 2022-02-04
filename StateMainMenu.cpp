@@ -17,13 +17,12 @@ StateMainMenu::StateMainMenu()
 
 	snakeTitleTex = renderer->createTexture( "res/title.png" );
 	enterToPlayTex = renderer->createTexture( "res/text_play.png" );
-
 }
 
 StateMainMenu::~StateMainMenu()
 {
 	renderer->destroyTexture( snakeTitleTex );
-	renderer->destroyTexture(enterToPlayTex );
+	renderer->destroyTexture( enterToPlayTex );
 
 }
 
@@ -43,10 +42,9 @@ void StateMainMenu::render()
 	// Render background.
 	renderer->drawRect( 0x604020FF, (renderer->getWindowWidth() - 550) / 2, (renderer->getWindowHeight() - 700) / 2, 550, 700, 0 );
 
-	// Snake image.
-	renderer->drawRect( snakeTitleTex, (renderer->getWindowWidth() - 356) / 2, (renderer->getWindowHeight() - 456) / 2 + 80, 356, 206, 0 );
+	// Title image.
+	renderer->drawRect( snakeTitleTex, (renderer->getWindowWidth() - 416) / 2, renderer->getWindowHeight() / 2 - 100, 416, 130, 0 );
 
-	// Game over text and instructions.
-	renderer->drawRect( enterToPlayTex, (renderer->getWindowWidth() - 400) / 2, 600, 400, 50, 0 );
-
+	// Instructions.
+	renderer->drawRect( enterToPlayTex, (renderer->getWindowWidth() - 325) / 2, 680, 325, 30, 0 );
 }

@@ -9,6 +9,7 @@ class SnakeRenderer;
 class Snake;
 class Fruit;
 
+
 class State
 {
 public:
@@ -98,6 +99,7 @@ private:
 	int length;
 };
 
+
 class StateMainMenu : public State
 {
 public:
@@ -113,9 +115,6 @@ private:
 	Texture* snakeTitleTex;
 	Texture* enterToPlayTex;
 };
-
-
-
 
 
 #endif // SNAKE_GAMESTATE_H
