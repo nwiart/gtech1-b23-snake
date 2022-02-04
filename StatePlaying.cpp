@@ -13,7 +13,7 @@
 
 
 StatePlaying::StatePlaying()
-	: score( 0 ), milliseconds( 0 ), brightness( 255 ), movementTimer( 5 ), deadTimer( 100 ), dead( false ), snakeRenderer( 0 )
+	: score( 0 ), milliseconds( 0 ), movementTimer( 5 ), deadTimer( 100 ), dead( false ), snakeRenderer( 0 )
 {
 	if ( !renderer ) {
 		std::cout << "You haven't set a renderer in the State class. Specify a valid one before creating a State object.\n";
@@ -103,18 +103,6 @@ State* StatePlaying::update()
 		}
 	}
 
-	// Day / night cycle.
-	float seconds = milliseconds / 1000.0F;
-	bool night = ((int) seconds / 30) & 1;
-	if ( night ) {
-		brightness--;
-		if ( brightness < 100 ) brightness = 100;
-	}
-	else {
-		brightness += 1;
-		if ( brightness > 255 ) brightness = 255;
-	}
-
 	// Dead timer before showing game over screen.
 	if ( dead ) {
 		deadTimer--;
@@ -171,10 +159,6 @@ void StatePlaying::render()
 	{
 		renderer->drawRect(BadFruitTex, Fruits[1]->x * tileSizeX, Fruits[1]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
 	}
-
-	// Brightness transparent plane.
-	int color = 0; color |= (255 - brightness);
-	renderer->drawRect(color, 0, 0, renderer->getWindowWidth(), renderer->getWindowHeight(), 0);
 
 	// Render score.
 	renderer->drawRect( 0x604020FF, 15, 15, 5 * 3 * 5 + 4 * 5 + 10, 35, 0 );
