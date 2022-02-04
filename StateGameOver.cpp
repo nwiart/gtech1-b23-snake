@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 
 #include <iostream>
+#include <fstream>
 
 
 StateGameOver::StateGameOver( int score, int length )
@@ -14,6 +15,21 @@ StateGameOver::StateGameOver( int score, int length )
 	if ( !renderer ) {
 		std::cout << "You haven't set a renderer in the State class. Specify a valid one before creating a State object.\n";
 		return;
+	}
+
+	// Load highscore.
+	std::ifstream f( "highscore.txt" );
+	f >> highscore;
+	f.close();
+
+	// Update highscore.
+	if ( score > highscore )
+	{
+		std::ofstream of( "highscore.txt" );
+		of << score;
+		of.close();
+
+		highscore = score;
 	}
 
 	snakeGameOverTex = renderer->createTexture( "res/snake_gameover.png" );
@@ -57,5 +73,5 @@ void StateGameOver::render()
 	// Score numbers.
 	renderer->drawNumber( score, renderer->getWindowWidth() / 2, 175 );
 	renderer->drawNumber( length, renderer->getWindowWidth() / 2, 205 );
-	renderer->drawNumber( 0, renderer->getWindowWidth() / 2, 235 );
+	renderer->drawNumber( highscore, renderer->getWindowWidth() / 2, 235 );
 }

@@ -97,6 +97,7 @@ private:
 
 	int score;
 	int length;
+	int highscore;
 };
 
 
