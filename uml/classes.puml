@@ -1,0 +1,225 @@
+@startuml
+
+
+
+
+
+/' Objects '/
+
+class Fruit {
+	+Fruit(FruitType type, int x, int y)
+	+type : FruitType
+	+active : bool
+	+x : int
+	+y : int
+}
+
+
+class Renderer {
+	+Renderer()
+	+~Renderer()
+	-renderer : SDL_Renderer*
+	-window : SDL_Window*
+	+createTexture(const char* path) : Texture*
+	-closeRequested : bool
+	+isCloseRequested() : bool {query}
+	+getWindowHeight() : int {query}
+	+getWindowWidth() : int {query}
+	-height : int
+	+initialize(int width, int height, const char* title, int frameDelay) : int
+	-width : int
+	-frameDelay : unsigned int
+	+beginRender() : void
+	+destroyTexture(Texture* t) : void
+	+drawDigit(int digit, int x, int y) : void
+	+drawNumber(int number, int x, int y) : void
+	+drawRect(unsigned int color, int x, int y, int width, int height, int angle) : void
+	+drawRect(Texture* t, int x, int y, int width, int height, int angle) : void
+	+endRender() : void
+	+pollWindowEvents() : void
+}
+
+
+class Segment {
+	+Segment(int x, int y)
+	+next : Segment*
+	+posX : int
+	+posY : int
+}
+
+
+class Snake {
+	+Snake(int x, int y)
+	+~Snake()
+	+getHead() : Segment* {query}
+	+getTail() : Segment* {query}
+	-head : Segment*
+	-tail : Segment*
+	+collides() : bool {query}
+	-direction : int
+	+getDirection() : int {query}
+	+{static} getDirectionBewteen(Segment* s0, Segment* s1) : int
+	+getHeadPosX() : int {query}
+	+getHeadPosY() : int {query}
+	+getLength() : int {query}
+	+addSegment() : void
+	+move() : void
+	+moveTailToHead() : void
+	+removeSegment() : void
+	+setDirection(int dir) : void
+}
+
+
+class SnakeRenderer {
+	+SnakeRenderer(Renderer* r)
+	+~SnakeRenderer()
+	-renderer : Renderer*
+	-snakeBodyTex : Texture*
+	-snakeHeadTex : Texture*
+	-snakeTailTex : Texture*
+	-snakeTurnTex : Texture*
+	+render(Snake* s) : void
+}
+
+
+abstract class State {
+	+State()
+	+{abstract} update() : State*
+	+{static} getTileSizeX() : int
+	+{static} getTileSizeY() : int
+	#{static} renderer : static Renderer*
+	+{static} GRID_SIZE_X : static const int
+	+{static} GRID_SIZE_Y : static const int
+	+{abstract} render() : void
+	+{static} setRenderer(Renderer* r) : void
+}
+
+
+class StateGameOver {
+	+StateGameOver(int score, int length)
+	+~StateGameOver()
+	+update() : State*
+	-gameOverInstructionsTex : Texture*
+	-gameOverScoresTex : Texture*
+	-gameOverTextTex : Texture*
+	-snakeGameOverTex : Texture*
+	-highscore : int
+	-length : int
+	-score : int
+	+render() : void
+}
+
+
+class StateMainMenu {
+	+StateMainMenu()
+	+~StateMainMenu()
+	+update() : State*
+	-enterToPlayTex : Texture*
+	-snakeTitleTex : Texture*
+	+render() : void
+}
+
+
+class StatePlaying {
+	+StatePlaying()
+	+~StatePlaying()
+	-Fruits : Fruit*
+	-snake : Snake*
+	-snakeRenderer : SnakeRenderer*
+	+update() : State*
+	-BadFruitTex : Texture*
+	-GoodFruitTex : Texture*
+	-dead : bool
+	-deadTimer : int
+	-direction : int
+	-milliseconds : int
+	-movementTimer : int
+	-score : int
+	+fruit_set(Fruit* f) : void
+	+render() : void
+}
+
+
+class Texture {
+	-Texture(SDL_Texture* t)
+	-~Texture()
+	-texture : SDL_Texture*
+}
+
+
+class Utils {
+	+{static} randomInt(int min, int max) : int
+}
+
+
+enum Fruit::FruitType {
+	BAD
+	GOOD
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+.State <|-- .StateGameOver
+
+
+.State <|-- .StateMainMenu
+
+
+.State <|-- .StatePlaying
+
+
+
+
+
+/' Aggregation relationships '/
+
+.Segment o-- .Segment
+
+
+.Snake "2" o-- .Segment
+
+
+.SnakeRenderer o-- .Renderer
+
+
+.SnakeRenderer "4" o-- .Texture
+
+
+.State o-- .Renderer
+
+
+.StateGameOver "4" o-- .Texture
+
+
+.StateMainMenu "2" o-- .Texture
+
+
+.StatePlaying o-- .Fruit
+
+
+.StatePlaying o-- .Snake
+
+
+.StatePlaying o-- .SnakeRenderer
+
+
+.StatePlaying "2" o-- .Texture
+
+
+
+
+
+
+/' Nested objects '/
+
+.Fruit +-- .Fruit::FruitType
+
+
+
+
+@enduml
+
