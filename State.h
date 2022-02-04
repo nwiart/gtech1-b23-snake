@@ -110,13 +110,8 @@ public:
 
 private:
 
-	Texture* snakeGameOverTex;
-	Texture* gameOverTextTex;
-	Texture* gameOverScoresTex;
-	Texture* gameOverInstructionsTex;
-
-	int score;
-	int length;
+	Texture* snakeTitleTex;
+	Texture* enterToPlayTex;
 };
 
 
