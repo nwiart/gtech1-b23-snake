@@ -15,18 +15,16 @@ StateMainMenu::StateMainMenu()
 		return;
 	}
 
-	snakeGameOverTex = renderer->createTexture( "res/snake_gameover.png" );
-	gameOverTextTex = renderer->createTexture( "res/gameover_text.png" );
-	gameOverScoresTex = renderer->createTexture( "res/gameover_scores.png" );
-	gameOverInstructionsTex = renderer->createTexture( "res/gameover_instructions.png" );
+	snakeTitleTex = renderer->createTexture( "res/title.png" );
+	enterToPlayTex = renderer->createTexture( "res/text_play.png" );
+
 }
 
 StateMainMenu::~StateMainMenu()
 {
-	renderer->destroyTexture( snakeGameOverTex );
-	renderer->destroyTexture( gameOverTextTex );
-	renderer->destroyTexture( gameOverScoresTex );
-	renderer->destroyTexture( gameOverInstructionsTex );
+	renderer->destroyTexture( snakeTitleTex );
+	renderer->destroyTexture(enterToPlayTex );
+
 }
 
 State* StateMainMenu::update()
@@ -46,15 +44,9 @@ void StateMainMenu::render()
 	renderer->drawRect( 0x604020FF, (renderer->getWindowWidth() - 550) / 2, (renderer->getWindowHeight() - 700) / 2, 550, 700, 0 );
 
 	// Snake image.
-	renderer->drawRect( snakeGameOverTex, (renderer->getWindowWidth() - 256) / 2, (renderer->getWindowHeight() - 256) / 2 + 80, 256, 256, 0 );
+	renderer->drawRect( snakeTitleTex, (renderer->getWindowWidth() - 356) / 2, (renderer->getWindowHeight() - 456) / 2 + 80, 356, 206, 0 );
 
 	// Game over text and instructions.
-	renderer->drawRect( gameOverTextTex, (renderer->getWindowWidth() - 400) / 2, 60, 400, 100, 0 );
-	renderer->drawRect( gameOverScoresTex, (renderer->getWindowWidth() - 160) / 2 - 90, 180, 160, 80, 0 );
-	renderer->drawRect( gameOverInstructionsTex, (renderer->getWindowWidth() - 400) / 2, 620, 400, 100, 0 );
+	renderer->drawRect( enterToPlayTex, (renderer->getWindowWidth() - 400) / 2, 600, 400, 50, 0 );
 
-	// Score numbers.
-	renderer->drawNumber( score, renderer->getWindowWidth() / 2, 175 );
-	renderer->drawNumber( length, renderer->getWindowWidth() / 2, 205 );
-	renderer->drawNumber( 0, renderer->getWindowWidth() / 2, 235 );
 }
