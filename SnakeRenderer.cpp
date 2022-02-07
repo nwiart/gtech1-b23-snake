@@ -5,6 +5,8 @@
 #include "Snake.h"
 #include "State.h"
 
+#include <SDL2/SDL.h>
+
 SnakeRenderer::SnakeRenderer( Renderer* r )
 	: renderer( r )
 {
@@ -20,6 +22,14 @@ SnakeRenderer::~SnakeRenderer()
 	renderer->destroyTexture( snakeBodyTex );
 	renderer->destroyTexture( snakeTurnTex );
 	renderer->destroyTexture( snakeTailTex );
+}
+
+void SnakeRenderer::setAlpha( unsigned char a )
+{
+	snakeHeadTex->setAlpha( a );
+	snakeBodyTex->setAlpha( a );
+	snakeTurnTex->setAlpha( a );
+	snakeTailTex->setAlpha( a );
 }
 
 void SnakeRenderer::render( Snake* snake )

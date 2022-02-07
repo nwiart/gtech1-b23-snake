@@ -13,3 +13,9 @@ Texture::~Texture()
 	if ( texture )
 		SDL_DestroyTexture( texture );
 }
+
+void Texture::setAlpha( unsigned char a )
+{
+	SDL_SetTextureBlendMode( texture, SDL_BLENDMODE_BLEND );
+	SDL_SetTextureAlphaMod( texture, a );
+}

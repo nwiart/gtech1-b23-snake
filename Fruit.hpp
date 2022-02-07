@@ -6,6 +6,7 @@ class Fruit
         {
             GOOD,
             BAD,
+			GHOST
         };
 
         int x;

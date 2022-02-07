@@ -14,6 +14,10 @@ private:
 	Texture( SDL_Texture* t );
 	~Texture();
 
+public:
+
+	void setAlpha( unsigned char a );
+
 
 
 private:

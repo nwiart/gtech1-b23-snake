@@ -27,10 +27,14 @@ StatePlaying::StatePlaying()
 	
 	Fruits[0] = new Fruit(Fruit::GOOD,0,0);
     Fruits[1] = new Fruit(Fruit::BAD,0,0);
+	Fruits[2] = new Fruit(Fruit::GHOST,0,0);
+
 	Fruits[1]->active = false;
+	Fruits[2]->active = false;
 
 	fruit_set(Fruits[0]);
 	fruit_set(Fruits[1]);
+	fruit_set(Fruits[2]);
 
 	GoodFruitTex = State::renderer->createTexture("res/fruit.png");
 	BadFruitTex = State::renderer->createTexture("res/fruit_bad.png");
@@ -43,6 +47,7 @@ StatePlaying::~StatePlaying()
 
 	delete Fruits[0];
     delete Fruits[1];
+	delete Fruits[2];
 }
 
 State* StatePlaying::update()
@@ -66,18 +71,23 @@ State* StatePlaying::update()
 			snake->setDirection( direction );
 			snake->move();
 
+			if ( !snake->isGhost() )
+			{
+				snakeRenderer->setAlpha( 255 );
+			}
+
+			bool fruitEaten = false;
+
 			// Is snake over the first fruit.
 			if (snake->getHeadPosX() == Fruits[0]->x && snake->getHeadPosY() == Fruits[0]->y)
 			{
 				score += 10;
 				snake->addSegment();
 
-				fruit_set(Fruits[0]);
-				fruit_set(Fruits[1]);
+				fruitEaten = true;
 			}
-			Fruits[1]->active = (score >= 50);
 			
-
+			// Bad fruit.
 			if (Fruits[1]->active)
 			{
 				if (snake->getHeadPosX() == Fruits[1]->x && snake->getHeadPosY() == Fruits[1]->y)
@@ -85,9 +95,31 @@ State* StatePlaying::update()
 					score -= 10;
 					snake->removeSegment();
 
-					fruit_set(Fruits[0]);
-					fruit_set(Fruits[1]);
+					fruitEaten = true;
 				}
+			}
+
+			// Ghost fruit.
+			if (Fruits[2]->active)
+			{
+				if (snake->getHeadPosX() == Fruits[2]->x && snake->getHeadPosY() == Fruits[2]->y)
+				{
+					snake->setGhost( true );
+					snakeRenderer->setAlpha( 127 );
+
+					fruitEaten = true;
+				}
+			}
+
+			if ( fruitEaten )
+			{
+				fruit_set(Fruits[0]);
+				fruit_set(Fruits[1]);
+				fruit_set(Fruits[2]);
+
+				Fruits[1]->active = (score >= 50);
+
+				Fruits[2]->active = ((rand() % 5) == 0);
 			}
 
 			// Is snake colliding with itself or with the walls.
@@ -156,9 +188,9 @@ void StatePlaying::render()
 
 	renderer->drawRect(GoodFruitTex, Fruits[0]->x * tileSizeX, Fruits[0]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
 	if (Fruits[1]->active)
-	{
 		renderer->drawRect(BadFruitTex, Fruits[1]->x * tileSizeX, Fruits[1]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
-	}
+	if (Fruits[2]->active)
+		renderer->drawRect(BadFruitTex, Fruits[2]->x * tileSizeX, Fruits[2]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation + 180);
 
 	// Render score.
 	renderer->drawRect( 0x604020FF, 15, 15, 5 * 3 * 5 + 4 * 5 + 10, 35, 0 );

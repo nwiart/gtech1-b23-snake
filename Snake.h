@@ -54,6 +54,10 @@ public:
 		/// Compute the snake's length.
 	int getLength() const;
 
+		/// "Ghost" mode disables the snake's self collision temporarily.
+	bool isGhost() const;
+	void setGhost( bool b );
+
 		/// Get the direction from two adjacent segments.
 	static int getDirectionBewteen( Segment* s0, Segment* s1 );
 
@@ -78,7 +82,10 @@ private:
 
 	Segment* head;
 	Segment* tail;
+
 	int direction;
+
+	int ghostTimer;
 };
 
 

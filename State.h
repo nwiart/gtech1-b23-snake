@@ -69,7 +69,7 @@ private:
 	int movementTimer;
 	int deadTimer;
 	bool dead;
-	Fruit* Fruits[2];
+	Fruit* Fruits[3];
 
 	SnakeRenderer* snakeRenderer;
 

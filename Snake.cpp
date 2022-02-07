@@ -13,7 +13,9 @@ Snake::Snake( int x, int y )
 	this->head = new Segment( x, y );
 	this->tail = new Segment( x, y + 1 );
 	this->head->next = this->tail;
+
 	this->direction = 0;
+	this->ghostTimer = 0;
 }
 
 Snake::~Snake()
@@ -31,6 +33,9 @@ void Snake::move()
 {
 	this->moveTailToHead();
 
+	if ( ghostTimer )
+		ghostTimer--;
+
 	// Then move head.
 	switch ( direction )
 	{
@@ -43,6 +48,10 @@ void Snake::move()
 
 bool Snake::collides() const
 {
+	// Ghost mode enabled.
+	if ( this->isGhost() )
+		return false;
+
 	Segment* s = this->head->next;
 	while ( s )
 	{
@@ -98,6 +107,16 @@ int Snake::getLength() const
 	}
 
 	return l;
+}
+
+bool Snake::isGhost() const
+{
+	return (ghostTimer > 0);
+}
+
+void Snake::setGhost( bool b )
+{
+	ghostTimer = b ? 50 : 0;
 }
 
 int Snake::getDirectionBewteen( Segment* s0, Segment* s1 )

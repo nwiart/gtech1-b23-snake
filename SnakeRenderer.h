@@ -14,6 +14,8 @@ public:
 	SnakeRenderer( Renderer* r );
 	~SnakeRenderer();
 
+	void setAlpha( unsigned char a );
+
 		/// Renders the specified snake using a renderer.
 	void render( Snake* s );
 
