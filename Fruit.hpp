@@ -1,3 +1,6 @@
+#ifndef SNAKE_FRUIT_H
+#define SNAKE_FRUIT_H
+
 class Fruit
 {
     public:
@@ -21,7 +24,6 @@ class Fruit
             this->type = type;
             this->active = true;
         }
-
 };
 
- 
+#endif // SNAKE_FRUIT_H
