@@ -24,6 +24,7 @@ make snake.out
 ## Run the game
 
 Run the following command in the repository's root folder to run the game.
+
 **WARNING :** The window's size is locked to 1024x768. The game has not been tested on resolutions lower than 1600x900, and playing it on lower resolution monitors might result in graphical problems.
 ```
 make run
