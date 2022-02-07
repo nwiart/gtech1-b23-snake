@@ -45,9 +45,8 @@ StatePlaying::~StatePlaying()
 	delete this->snake;
 	delete this->snakeRenderer;
 
-	delete Fruits[0];
-    delete Fruits[1];
-	delete Fruits[2];
+	for ( int i = 0; i < 3; ++i )
+		delete Fruits[i];
 }
 
 State* StatePlaying::update()
@@ -76,50 +75,41 @@ State* StatePlaying::update()
 				snakeRenderer->setAlpha( 255 );
 			}
 
-			bool fruitEaten = false;
-
-			// Is snake over the first fruit.
-			if (snake->getHeadPosX() == Fruits[0]->x && snake->getHeadPosY() == Fruits[0]->y)
+			// Is snake over a fruit.
+			for ( int i = 0; i < 3; ++i )
 			{
-				score += 10;
-				snake->addSegment();
+				Fruit* f = Fruits[i];
 
-				fruitEaten = true;
-			}
-			
-			// Bad fruit.
-			if (Fruits[1]->active)
-			{
-				if (snake->getHeadPosX() == Fruits[1]->x && snake->getHeadPosY() == Fruits[1]->y)
+				if ( f->active && (snake->getHeadPosX() == f->x && snake->getHeadPosY() == f->y) )
 				{
-					score -= 10;
-					snake->removeSegment();
+					switch ( f->type )
+					{
+					case Fruit::GOOD:
+						score += 10;
+						snake->addSegment();
+						break;
 
-					fruitEaten = true;
+					case Fruit::BAD:
+						score -= 10;
+						snake->removeSegment();
+						break;
+
+					case Fruit::GHOST:
+						snake->setGhost( true );
+						snakeRenderer->setAlpha( 127 );
+						break;
+					}
+
+					// Randomly replace fruits.
+					fruit_set(Fruits[0]);
+					fruit_set(Fruits[1]);
+					fruit_set(Fruits[2]);
+
+					Fruits[1]->active = (score >= 50);
+					Fruits[2]->active = ((rand() % 5) == 0);
+
+					continue;
 				}
-			}
-
-			// Ghost fruit.
-			if (Fruits[2]->active)
-			{
-				if (snake->getHeadPosX() == Fruits[2]->x && snake->getHeadPosY() == Fruits[2]->y)
-				{
-					snake->setGhost( true );
-					snakeRenderer->setAlpha( 127 );
-
-					fruitEaten = true;
-				}
-			}
-
-			if ( fruitEaten )
-			{
-				fruit_set(Fruits[0]);
-				fruit_set(Fruits[1]);
-				fruit_set(Fruits[2]);
-
-				Fruits[1]->active = (score >= 50);
-
-				Fruits[2]->active = ((rand() % 5) == 0);
 			}
 
 			// Is snake colliding with itself or with the walls.
