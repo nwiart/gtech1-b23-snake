@@ -5,21 +5,35 @@ Snake game written in C++ with SDL2
 - [joachim-gabin](https://github.com/joachim-gabin)
 - [nwiart](https://github.com/nwiart)
 
+
+
 ## Building
 
 Install SDL2 dev tools and make :
-
 ```
 sudo apt install libsdl2-dev libsdl2-image-dev make
 ```
 
-## Run the game
+To build the game, use the following command in the repository's root folder :
+```
+make snake.out
+```
 
+
+
+## Run the game
 ```
 make run
 ```
 
-## WSL Prerequisites
 
-- You must run a distro under WSL 1.
-- You must install a X server [VcxServ](https://sourceforge.net/projects/vcxsrv/)
+
+## How to Play & Controls
+
+The snake is moving through the game's grid at a constant rate. The player can change the direction using the arrow keys on the keyboard.
+
+You must eat apples to make your snake grow more and more.
+But you must pay attention to where the rest of the snake body is.
+You are not allowed to hit the screen borders or one of the snake's segments.
+
+Try to get the highest score possible without colliding into anything.
