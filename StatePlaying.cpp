@@ -38,10 +38,15 @@ StatePlaying::StatePlaying()
 
 	GoodFruitTex = State::renderer->createTexture("res/fruit.png");
 	BadFruitTex = State::renderer->createTexture("res/fruit_bad.png");
+	GhostFruitTex = State::renderer->createTexture("res/fruit_ghost.png");
 }
 
 StatePlaying::~StatePlaying()
 {
+	this->renderer->destroyTexture( GoodFruitTex );
+	this->renderer->destroyTexture( BadFruitTex );
+	this->renderer->destroyTexture( GhostFruitTex );
+
 	delete this->snake;
 	delete this->snakeRenderer;
 
@@ -180,7 +185,7 @@ void StatePlaying::render()
 	if (Fruits[1]->active)
 		renderer->drawRect(BadFruitTex, Fruits[1]->x * tileSizeX, Fruits[1]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
 	if (Fruits[2]->active)
-		renderer->drawRect(BadFruitTex, Fruits[2]->x * tileSizeX, Fruits[2]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation + 180);
+		renderer->drawRect(GhostFruitTex, Fruits[2]->x * tileSizeX - 8, Fruits[2]->y * tileSizeY - 8 + 128, tileSizeX * 1.5F, tileSizeY * 1.5F, fruitRotation);
 
 	// Render score.
 	renderer->drawRect( 0x604020FF, 15, 15, 5 * 3 * 5 + 4 * 5 + 10, 35, 0 );

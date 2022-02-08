@@ -75,6 +75,7 @@ private:
 
 	Texture* GoodFruitTex;
 	Texture* BadFruitTex;
+	Texture* GhostFruitTex;
 };
 
 
