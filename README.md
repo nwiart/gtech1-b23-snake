@@ -41,3 +41,11 @@ But you must pay attention to where the rest of the snake body is.
 You are not allowed to hit the screen borders or one of the snake's segments.
 
 Try to get the highest score possible without colliding into anything.
+
+### Fruit types
+
+There are three different kinds of fruits in the game :
+- Regular Fruit : This is the most common fruit and will make your snake grow by one segment upon eating.
+- Bad Fruit : This purple fruit decreases your snake's length by one. However, you cannot lose by eating this fruit since it won't appear if your snake is too short.
+- Ghost Fruit : Activates a bonus when eaten. During a short amount of time, the snake becomes transparent and the player is allowed to pass through itself. After that, the snake will become opaque again, indicating that the bonus is no longer active.
+However, this bonus does not allow the snake to go out of bounds. It only disables self collision.
