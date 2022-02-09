@@ -56,17 +56,20 @@ class Snake {
 	-head : Segment*
 	-tail : Segment*
 	+collides() : bool {query}
+	+isGhost() : bool {query}
 	-direction : int
 	+getDirection() : int {query}
 	+{static} getDirectionBewteen(Segment* s0, Segment* s1) : int
 	+getHeadPosX() : int {query}
 	+getHeadPosY() : int {query}
 	+getLength() : int {query}
+	-ghostTimer : int
 	+addSegment() : void
 	+move() : void
 	+moveTailToHead() : void
 	+removeSegment() : void
 	+setDirection(int dir) : void
+	+setGhost(bool b) : void
 }
 
 
@@ -79,6 +82,7 @@ class SnakeRenderer {
 	-snakeTailTex : Texture*
 	-snakeTurnTex : Texture*
 	+render(Snake* s) : void
+	+setAlpha(unsigned char a) : void
 }
 
 
@@ -128,15 +132,20 @@ class StatePlaying {
 	-snakeRenderer : SnakeRenderer*
 	+update() : State*
 	-BadFruitTex : Texture*
+	-GhostFruitTex : Texture*
 	-GoodFruitTex : Texture*
+	-getFruitSprite(Fruit::FruitType type) : Texture* {query}
 	-dead : bool
 	-deadTimer : int
 	-direction : int
+	-fruitSpawnTimer : int
 	-milliseconds : int
 	-movementTimer : int
 	-score : int
+	-fruits : std::vector<Fruit*>
 	+fruit_set(Fruit* f) : void
 	+render() : void
+	-spawnFruit() : void
 }
 
 
@@ -144,6 +153,7 @@ class Texture {
 	-Texture(SDL_Texture* t)
 	-~Texture()
 	-texture : SDL_Texture*
+	+setAlpha(unsigned char a) : void
 }
 
 
@@ -154,6 +164,7 @@ class Utils {
 
 enum Fruit::FruitType {
 	BAD
+	GHOST
 	GOOD
 }
 
@@ -198,7 +209,7 @@ enum Fruit::FruitType {
 .StateMainMenu "2" o-- .Texture
 
 
-.StatePlaying o-- .Fruit
+.StatePlaying "2" o-- .Fruit
 
 
 .StatePlaying o-- .Snake
@@ -207,7 +218,7 @@ enum Fruit::FruitType {
 .StatePlaying o-- .SnakeRenderer
 
 
-.StatePlaying "2" o-- .Texture
+.StatePlaying "3" o-- .Texture
 
 
 
