@@ -13,7 +13,7 @@
 
 
 StatePlaying::StatePlaying()
-	: score( 0 ), milliseconds( 0 ), movementTimer( 5 ), deadTimer( 100 ), dead( false ), snakeRenderer( 0 )
+	: score( 0 ), milliseconds( 0 ), movementTimer( 5 ), fruitSpawnTimer( 0 ), deadTimer( 100 ), dead( false ), snakeRenderer( 0 )
 {
 	if ( !renderer ) {
 		std::cout << "You haven't set a renderer in the State class. Specify a valid one before creating a State object.\n";
@@ -24,17 +24,6 @@ StatePlaying::StatePlaying()
 	this->direction = snake->getDirection();
 
 	this->snakeRenderer = new SnakeRenderer( State::renderer );
-	
-	Fruits[0] = new Fruit(Fruit::GOOD,0,0);
-    Fruits[1] = new Fruit(Fruit::BAD,0,0);
-	Fruits[2] = new Fruit(Fruit::GHOST,0,0);
-
-	Fruits[1]->active = false;
-	Fruits[2]->active = false;
-
-	fruit_set(Fruits[0]);
-	fruit_set(Fruits[1]);
-	fruit_set(Fruits[2]);
 
 	GoodFruitTex = State::renderer->createTexture("res/fruit.png");
 	BadFruitTex = State::renderer->createTexture("res/fruit_bad.png");
@@ -50,8 +39,9 @@ StatePlaying::~StatePlaying()
 	delete this->snake;
 	delete this->snakeRenderer;
 
-	for ( int i = 0; i < 3; ++i )
-		delete Fruits[i];
+	// Destroy remaining fruits.
+	for ( Fruit* f : fruits )
+		delete f;
 }
 
 State* StatePlaying::update()
@@ -63,6 +53,14 @@ State* StatePlaying::update()
 	if ( keyStates[SDL_SCANCODE_DOWN]  && snake->getDirection() != DIRECTION_UP )    direction = DIRECTION_DOWN;
 	if ( keyStates[SDL_SCANCODE_LEFT]  && snake->getDirection() != DIRECTION_RIGHT ) direction = DIRECTION_LEFT;
 	if ( keyStates[SDL_SCANCODE_RIGHT] && snake->getDirection() != DIRECTION_LEFT )  direction = DIRECTION_RIGHT;
+
+	// Fruit spawn.
+	this->fruitSpawnTimer--;
+	if ( this->fruitSpawnTimer <= 0 )
+	{
+		this->fruitSpawnTimer = 50 * 3;
+		this->spawnFruit();
+	}
 
 	movementTimer--;
 	if ( movementTimer == 0 )
@@ -81,11 +79,11 @@ State* StatePlaying::update()
 			}
 
 			// Is snake over a fruit.
-			for ( int i = 0; i < 3; ++i )
+			for ( int i = 0; i < fruits.size(); ++i )
 			{
-				Fruit* f = Fruits[i];
+				Fruit* f = fruits[i];
 
-				if ( f->active && (snake->getHeadPosX() == f->x && snake->getHeadPosY() == f->y) )
+				if ( snake->getHeadPosX() == f->x && snake->getHeadPosY() == f->y )
 				{
 					switch ( f->type )
 					{
@@ -105,15 +103,9 @@ State* StatePlaying::update()
 						break;
 					}
 
-					// Randomly replace fruits.
-					fruit_set(Fruits[0]);
-					fruit_set(Fruits[1]);
-					fruit_set(Fruits[2]);
-
-					Fruits[1]->active = (score >= 50);
-					Fruits[2]->active = ((rand() % 5) == 0);
-
-					continue;
+					delete f;
+					fruits.erase( fruits.begin() + i );
+					break;
 				}
 			}
 
@@ -170,22 +162,48 @@ void StatePlaying::fruit_set(Fruit* f)
     f->y = posy_fruit;
 }
 
+Texture* StatePlaying::getFruitSprite( Fruit::FruitType type ) const
+{
+	switch ( type )
+	{
+	case Fruit::GOOD:  return GoodFruitTex;
+	case Fruit::BAD:   return BadFruitTex;
+	case Fruit::GHOST: return GhostFruitTex;
+	}
+
+	return 0;
+}
+
+void StatePlaying::spawnFruit()
+{
+	float chance = rand() / (float) RAND_MAX;
+	Fruit::FruitType type;
+	if      ( chance <= 0.07F ) type = Fruit::GHOST;
+	else if ( chance <= 0.25F ) type = score >= 20 ? Fruit::BAD : Fruit::GOOD;
+	else                        type = Fruit::GOOD;
+
+	Fruit* f = new Fruit( type, 0, 0 );
+	fruit_set( f );
+
+	fruits.push_back( f );
+}
+
 void StatePlaying::render()
 {
 	// Render snake (and blink when dead).
 	if ( !dead || (SDL_GetTicks() % 240) >= 120 )
 		snakeRenderer->render( snake );
 	
-	// Render both fruits.
 	const int tileSizeX = State::getTileSizeX();
 	const int tileSizeY = State::getTileSizeY();
 	float fruitRotation = sin(SDL_GetTicks() / 1000.0F * 3.0F) * 30.0F;
 
-	renderer->drawRect(GoodFruitTex, Fruits[0]->x * tileSizeX, Fruits[0]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
-	if (Fruits[1]->active)
-		renderer->drawRect(BadFruitTex, Fruits[1]->x * tileSizeX, Fruits[1]->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
-	if (Fruits[2]->active)
-		renderer->drawRect(GhostFruitTex, Fruits[2]->x * tileSizeX - 8, Fruits[2]->y * tileSizeY - 8 + 128, tileSizeX * 1.5F, tileSizeY * 1.5F, fruitRotation);
+	// Render fruits.
+	for ( Fruit* f : this->fruits )
+	{
+		Texture* t = this->getFruitSprite( f->type );
+		renderer->drawRect(t, f->x * tileSizeX, f->y * tileSizeY + 128, tileSizeX, tileSizeY, fruitRotation);
+	}
 
 	// Render score.
 	renderer->drawRect( 0x604020FF, 15, 15, 5 * 3 * 5 + 4 * 5 + 10, 35, 0 );

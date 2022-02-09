@@ -1,13 +1,16 @@
 #ifndef SNAKE_GAMESTATE_H
 #define SNAKE_GAMESTATE_H
 
+#include "Fruit.hpp"
+
+#include <vector>
+
 
 class Renderer;
 class Texture;
 class SnakeRenderer;
 
 class Snake;
-class Fruit;
 
 
 class State
@@ -57,6 +60,13 @@ public:
 	virtual void   render() override;
 	void fruit_set(Fruit* f);
 
+private:
+
+	Texture* getFruitSprite( Fruit::FruitType type ) const;
+
+		/// Spawns a fruit of random type at a random location.
+	void spawnFruit();
+
 
 private:
 
@@ -67,8 +77,11 @@ private:
 
 	int milliseconds;
 	int movementTimer;
+	int fruitSpawnTimer;
 	int deadTimer;
 	bool dead;
+
+	std::vector<Fruit*> fruits;
 	Fruit* Fruits[3];
 
 	SnakeRenderer* snakeRenderer;
